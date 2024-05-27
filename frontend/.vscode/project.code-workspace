@@ -1,0 +1,10 @@
+{
+  "folders": [
+    { "name": "frontend", "path": "../" },
+    { "name": "root", "path": "../../" }
+  ],
+  "settings": {
+    "vue.server.hybridMode": true,
+    "vue3snippets.enable-compile-vue-file-on-did-save-code": false
+  }
+}

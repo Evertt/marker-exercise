@@ -1,0 +1,36 @@
+services:
+  mongo:
+    container_name: marker-mongodb
+    image: mongo:latest
+    volumes:
+      - ./backend/data:/data/db
+    command: mongod --noauth
+    restart: always
+
+  backend:
+    container_name: marker-backend
+    build: ./backend
+    ports:
+      - '3000:3000'
+    depends_on:
+      - mongo
+    restart: always
+    env_file:
+      - ./backend/.env
+    volumes:
+      - ./:/app
+
+  frontend:
+    container_name: marker-frontend
+    build: ./frontend
+    ports:
+      - '5173:5173'
+    depends_on:
+      - backend
+    env_file:
+      - ./frontend/.env
+    volumes:
+      - ./:/app
+
+volumes:
+  mongo-data:

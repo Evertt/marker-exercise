@@ -1,0 +1,20 @@
+{
+  "folders": [
+    { "name": "backend", "path": "../backend" },
+    { "name": "frontend", "path": "../frontend" },
+    { "name": "root", "path": "../" }
+  ],
+  "settings": {
+    "editor.codeActionsOnSave": {
+      "source.fixAll": "explicit"
+    },
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "vue.server.hybridMode": true,
+    "vue3snippets.enable-compile-vue-file-on-did-save-code": false,
+    "[dockerfile]": {
+      "editor.defaultFormatter": "ms-azuretools.vscode-docker"
+    },
+    "typescript.tsdk": "root/node_modules/typescript/lib"
+  }
+}
