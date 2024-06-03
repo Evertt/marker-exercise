@@ -6,14 +6,17 @@
     "cypress.config.*",
     "nightwatch.conf.*",
     "playwright.config.*",
-    "typed-router.d.ts"
+    "typed-router.d.ts",
+    "generate-env-types.js"
   ],
   "compilerOptions": {
-    "baseUrl": "./frontend",
-    "composite": true,
     "noEmit": true,
+    // "outDir": "./node_modules/.vue-build",
+    "composite": true,
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
-
+    "allowJs": true,
+    "checkJs": true,
+    "rootDir": "..",
     "module": "ESNext",
     "moduleResolution": "Bundler",
     "types": ["node", "unplugin-vue-router/client"]

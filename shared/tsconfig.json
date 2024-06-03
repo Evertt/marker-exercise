@@ -1,0 +1,48 @@
+{
+  "include": ["./env.d.ts", "./src/**/*", "../backend/src/**/*"],
+  "compilerOptions": {
+    // Most non-library projects don't need to emit declarations.
+    // So we add this option by default to make the config more friendly to most users.
+    "noEmit": true,
+    // When type-checking with solution-style tsconfigs, though with `noEmit: true`, there won't
+    // be any `.d.ts` files emitted, but tsc still writes a `.tsbuildinfo` file to the `outDir`
+    // for each project. If we don't explicitly set the `outDir`, it will be in the same folder
+    // as the `tsconfig.json` file, which would look messy.
+    // Setting it to `./dist/` isn't ideal either, because it would pollute the `dist` folder.
+    // So we set it to a hidden folder in `node_modules` to avoid polluting the project root.
+    // FIXME:
+    // This caused a regression: https://github.com/vuejs/tsconfig/issues/27
+    // Need to find a better solution.
+    "outDir": "./node_modules/.cache/tsconfig.shared.tsbuildinfo",
+
+    // As long as you are using a build tool, we recommend you to author and ship in ES modules.
+    // Even if you are targeting Node.js, because
+    //  - `CommonJS` is too outdated
+    //  - the ecosystem hasn't fully caught up with `Node16`/`NodeNext`
+    // This recommendation includes environments like Vitest, Vite Config File, Vite SSR, etc.
+    "module": "Preserve",
+
+    // We expect users to use bundlers.
+    // So here we enable some resolution features that are only available in bundlers.
+    "resolveJsonModule": true,
+    "moduleResolution": "Bundler",
+    // `allowImportingTsExtensions` can only be used when `noEmit` or `emitDeclarationOnly` is set.
+    // But `noEmit` may cause problems with solution-style tsconfigs:
+    // <https://github.com/microsoft/TypeScript/issues/49844>
+    // And `emitDeclarationOnly` is not always wanted.
+    // Considering it's not likely to be commonly used in Vue codebases, we don't enable it here.
+
+    "strict": true,
+
+    "verbatimModuleSyntax": true,
+
+    "target": "ESNext",
+
+    // Recommended
+    "esModuleInterop": true,
+
+    // TODO: check whether this is necessary or at least useful
+    "skipLibCheck": true,
+    "types": ["./env.d.ts"]
+  }
+}

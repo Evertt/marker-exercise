@@ -41,8 +41,6 @@ async function connectDb() {
   const disconnected = cached.conn && cached.conn?.connection.readyState !== connected
   if (!cached.promise || disconnected) {
     const opts = {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
       bufferCommands: false
       // bufferMaxEntries: 0,
       // useFindAndModify: true,

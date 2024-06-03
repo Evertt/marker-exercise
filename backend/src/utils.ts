@@ -1,5 +1,14 @@
 import winston from 'winston'
 import type { ZodIssue } from 'zod'
+import type { Model } from 'mongoose'
+
+export type GetModelGenerics<M extends Model<any>> =
+  M extends Model<infer RawDocType, any, any, any, infer HydratedDocument>
+    ? {
+        RawDocType: RawDocType
+        HydratedDocument: HydratedDocument
+      }
+    : never
 
 export const logger = winston.createLogger({
   level: 'info',

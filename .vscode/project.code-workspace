@@ -1,8 +1,9 @@
 {
   "folders": [
+    { "name": "shared", "path": "../shared" },
     { "name": "backend", "path": "../backend" },
     { "name": "frontend", "path": "../frontend" },
-    { "name": "root", "path": "../" }
+    { "path": "../" }
   ],
   "settings": {
     "editor.codeActionsOnSave": {
@@ -10,11 +11,15 @@
     },
     "editor.formatOnSave": true,
     "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "vue.server.hybridMode": true,
-    "vue3snippets.enable-compile-vue-file-on-did-save-code": false,
+    // "vue.server.hybridMode": true,
+    // "vue3snippets.enable-compile-vue-file-on-did-save-code": false,
     "[dockerfile]": {
       "editor.defaultFormatter": "ms-azuretools.vscode-docker"
     },
-    "typescript.tsdk": "root/node_modules/typescript/lib"
+    "typescript.tsdk": "../node_modules/typescript/lib",
+    "typescript.referencesCodeLens.enabled": true,
+    "[xml]": {
+      "editor.defaultFormatter": "DotJoshJohnson.xml"
+    }
   }
 }

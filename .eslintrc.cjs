@@ -9,6 +9,9 @@ module.exports = {
     '@vue/eslint-config-typescript',
     '@vue/eslint-config-prettier/skip-formatting'
   ],
+  settings: {
+    'import/core-modules': ['vue-router/auto', 'vue-router/auto-routes']
+  },
   rules: {
     'vue/multi-word-component-names': 0
   },

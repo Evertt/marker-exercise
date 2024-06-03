@@ -1,10 +1,17 @@
 {
   "folders": [
-    { "name": "frontend", "path": "../" },
-    { "name": "root", "path": "../../" }
+    { "name": "frontend", "path": ".." },
+    { "name": "shared", "path": "../../shared" },
+    { "path": "../.." }
   ],
   "settings": {
-    "vue.server.hybridMode": true,
+    "editor.codeActionsOnSave": {
+      "source.fixAll": "explicit"
+    },
+    "editor.formatOnSave": true,
+    // "vue.server.hybridMode": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "typescript.tsdk": "node_modules/typescript/lib",
     "vue3snippets.enable-compile-vue-file-on-did-save-code": false
   }
 }

@@ -19,14 +19,8 @@ declare module 'vue-router/auto-routes' {
    */
   export interface RouteNamedMap {
     '/': RouteRecordInfo<'/', '/', Record<never, never>, Record<never, never>>,
-    '/auth/forgot-password': RouteRecordInfo<'/auth/forgot-password', '/auth/forgot-password', Record<never, never>, Record<never, never>>,
-    '/auth/login': RouteRecordInfo<'/auth/login', '/auth/login', Record<never, never>, Record<never, never>>,
-    '/auth/register': RouteRecordInfo<'/auth/register', '/auth/register', Record<never, never>, Record<never, never>>,
-    '/feedback/': RouteRecordInfo<'/feedback/', '/feedback', Record<never, never>, Record<never, never>>,
-    '/feedback/list': RouteRecordInfo<'/feedback/list', '/feedback/list', Record<never, never>, Record<never, never>>,
-    '/feedback/list/': RouteRecordInfo<'/feedback/list/', '/feedback/list', Record<never, never>, Record<never, never>>,
-    '/feedback/list/[id]': RouteRecordInfo<'/feedback/list/[id]', '/feedback/list/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
-    '/feedback/new': RouteRecordInfo<'/feedback/new', '/feedback/new', Record<never, never>, Record<never, never>>,
-    '/feedback/new2': RouteRecordInfo<'/feedback/new2', '/feedback/new2', Record<never, never>, Record<never, never>>,
+    '//': RouteRecordInfo<'//', '/', Record<never, never>, Record<never, never>>,
+    '//[id]': RouteRecordInfo<'//[id]', '/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
+    '/new': RouteRecordInfo<'/new', '/new', Record<never, never>, Record<never, never>>,
   }
 }

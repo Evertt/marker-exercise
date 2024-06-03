@@ -1,5 +1,5 @@
 #!/bin/sh
 
-npm i @rollup/rollup-linux-arm64-gnu
+npm i --no-save @rollup/rollup-linux-arm64-gnu
 
 npm run dev

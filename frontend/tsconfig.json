@@ -1,5 +1,28 @@
 {
+  // "extends": "./.svelte-kit/tsconfig.json",
   "files": [],
+  // "compilerOptions": {
+  //   "baseUrl": ".",
+  //   "rootDir": "..",
+  //   "composite": true,
+  //   "noEmit": true
+  // },
+  // "compilerOptions": {
+  //   "baseUrl": ".",
+  //   "paths": {
+  //     "$lib/*": ["src/lib/*"],
+  //     "$components/*": ["src/components/*"],
+  //     "$stores/*": ["src/stores/*"],
+  //     "$utils/*": ["src/utils/*"],
+  //     "$styles/*": ["src/styles/*"],
+  //     "$routes/*": ["src/routes/*"],
+  //     "$assets/*": ["src/assets/*"],
+  //     "$static/*": ["src/static/*"],
+  //     "$types/*": ["src/types/*"],
+  //     "$env/*": ["src/env/*"],
+  //     "$shared/*": ["../shared/src/*"]
+  //   }
+  // },
   "references": [
     {
       "path": "./tsconfig.node.json"

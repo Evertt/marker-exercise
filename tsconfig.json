@@ -2,10 +2,13 @@
   "files": [],
   "references": [
     {
-      "path": "./frontend/tsconfig.json"
+      "path": "./shared/tsconfig.json"
     },
     {
       "path": "./backend/tsconfig.json"
+    },
+    {
+      "path": "./frontend/tsconfig.json"
     }
   ],
   "exclude": [
