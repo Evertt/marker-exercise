@@ -8,7 +8,7 @@
     "dev": "run-p sync-types dev-only",
     "dev-only": "vite --host",
     "build": "run-p type-check \"build-only {@}\" --",
-    "sync-types": "nodemon -w .env docker/generate-env-types.js",
+    "sync-types": "nodemon -w .env generate-env-types.js",
     "preview": "vite preview",
     "build-only": "vite build",
     "type-check": "vue-tsc --build --force",

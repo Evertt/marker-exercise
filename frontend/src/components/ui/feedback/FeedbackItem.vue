@@ -25,7 +25,7 @@ const props = defineProps<{
     class="max-w-full w-full p-4 bg-[#F8FAFC] aria-[current=page]:!bg-[#EAF0F6] hover:bg-[#EAF0F6]/70 rounded-md cursor-pointer block *:left-auto"
     :to="$props.id"
   >
-    <div class="h-full flex flex-col justify-between gap-1 *:bottom-auto">
+    <div class="h-full flex flex-col justify-around gap-1 *:bottom-auto">
       <h4 class="min-w-4 pr-2">
         <img
           :src="iconMap[props.type]"

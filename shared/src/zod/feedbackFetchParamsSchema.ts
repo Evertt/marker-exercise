@@ -16,6 +16,7 @@ const isoStringToDateSchema = z
   })
 
 export const feedbackFetchParamsSchema = z.object({
+  page: z.coerce.number().default(1),
   order: z.enum(['asc', 'desc']).default('desc'),
   itemsPerPage: z.coerce.number().default(20),
   // localItemCount: z.coerce.number().default(0),
@@ -38,6 +39,7 @@ export type FeedbackFetchParams = z.infer<typeof feedbackFetchParamsSchema>
 export type URLFeedbackFetchParams = Merge<
   Schema<FeedbackFetchParams, string>,
   {
+    page: `${number}`
     order: 'asc' | 'desc'
     itemsPerPage: `${number}`
   }

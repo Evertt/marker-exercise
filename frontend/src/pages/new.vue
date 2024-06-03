@@ -3,10 +3,13 @@ import { AutoForm } from '@/components/ui/auto-form'
 import { DependencyType } from '@/components/ui/auto-form/interface'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { feedbackSchema } from '$shared/zod'
+import { feedbackSchema, newFeedbackSchema } from '$shared/zod'
+import env from "@/env"
+
+const router = useRouter()
 
 async function onSubmit(data: any) {
-  const resp = await fetch('http://localhost:3000/api/feedback', {
+  const resp = await fetch(`${env.VITE_API_URL}/feedback`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -21,7 +24,8 @@ async function onSubmit(data: any) {
   }
 
   const json = await resp.json()
-  console.log('json', json)
+  const newModel = feedbackSchema.parse(json)
+  router.push({ name: '//[id]', params: { id: newModel._id }})
 }
 </script>
 
@@ -35,7 +39,7 @@ async function onSubmit(data: any) {
         <AutoForm
           class="space-y-6 [&>:not(:has(textarea))]:max-w-xs"
           @submit="onSubmit"
-          :schema="feedbackSchema"
+          :schema="newFeedbackSchema"
           :dependencies="[
             {
               sourceField: '_id',

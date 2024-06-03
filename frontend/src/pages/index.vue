@@ -6,7 +6,7 @@ import {
 } from '@/components/ui/resizable'
 import FeedbackItemComp from '@/components/ui/feedback/FeedbackItem.vue'
 import { Button } from '@/components/ui/button'
-import { onMounted } from 'vue'
+import { onMounted, type VNodeRef } from 'vue'
 import {
   type PaginatedResults,
   type FeedbackItem,
@@ -17,78 +17,15 @@ import { z } from 'zod'
 import type { Schema, Merge } from 'type-fest'
 import { sortedUniqBy } from 'lodash-es'
 import { PaginationGenerator } from '@/components/ui/pagination'
+import { useFeedbackStore } from "@/stores/feedback"
 
-const items = ref<FeedbackItem[]>([])
+const feedbackStore = useFeedbackStore()
 
-function fetchSomeMoreFeedback() {
-  type FetchParamsSchema = Merge<
-    Schema<FeedbackFetchParams, string>,
-    {
-      order: 'asc' | 'desc'
-    }
-  >
+const itemsListEl = ref<HTMLDivElement | null>(null)
 
-  const params: FetchParamsSchema = {
-    itemsPerPage: '5',
-    // localItemCount: `${items.value.length}`,
-    minCreatedAt: items.value
-      ?.toSorted(
-        (a: FeedbackItem, b: FeedbackItem) =>
-          a.createdAt.getTime() - b.createdAt.getTime()
-      )[0]
-      ?.createdAt.toISOString(), // ?? new Date(Date.now() - 3600 * 24 * 7).toISOString(),
-    maxCreatedAt: items.value
-      ?.toSorted(
-        (a: FeedbackItem, b: FeedbackItem) =>
-          b.createdAt.getTime() - a.createdAt.getTime()
-      )[0]
-      ?.createdAt.toISOString(), // ?? new Date(Date.now() - 3600 * 24 * 7).toISOString(),
-    maxUpdatedAt: items.value
-      ?.toSorted(
-        (a: FeedbackItem, b: FeedbackItem) =>
-          b.updatedAt.getTime() - a.updatedAt.getTime()
-      )[0]
-      ?.updatedAt.toISOString(), // ?? new Date(Date.now() - 3600 * 24 * 7).toISOString(),
-    order: 'desc'
-  }
-
-  const urlSearchParams = new URLSearchParams(Object.entries(params))
-
-  fetch(`${import.meta.env.VITE_API_URL}/feedback?${urlSearchParams}`)
-    .then((res) => res.json())
-    .then((data: PaginatedResults) => {
-      const sortDirection = params.order === 'asc' ? 1 : -1
-      const nextItems = z.array(feedbackSchema).parse(data.newPageItems)
-      const updatedCacheItems = z.array(feedbackSchema).parse(data.updatedCacheItems)
-      console.log({ nextItems, updatedCacheItems })
-
-      items.value = sortedUniqBy(
-        items.value
-          .concat(nextItems)
-          .map((item) => {
-            const updatedItem = updatedCacheItems.find(
-              (updatedItem) => updatedItem._id === item._id
-            )
-            return updatedItem ?? item
-          })
-          .sort(
-            (a, b) => sortDirection * (a.updatedAt.getTime() - b.updatedAt.getTime())
-          ),
-        '_id'
-      )
-    })
-    .catch((err) => {
-      console.error(err)
-    })
-}
-
-onMounted(() => {
-  if (items.value.length) return
-  fetchSomeMoreFeedback()
-})
-
-watchEffect(() => {
-  console.log('items', [...items.value.map((o) => ({ ...o }))])
+const itemsPerPage = computed(() => !itemsListEl.value ? 0 : getComputedStyle(itemsListEl.value).getPropertyValue("grid-template-rows").split(" ").length)
+watch(itemsPerPage, newItemsPerPage => {
+  feedbackStore.itemsPerPage = newItemsPerPage
 })
 </script>
 
@@ -134,23 +71,29 @@ watchEffect(() => {
         <span>Filter and Sort</span>
       </div>
       <div
+        ref="itemsListEl"
         id="items-list"
-        class="grow shrink p-2 h-full overflow-hidden grid grid-flow-col gap-1 items-center"
+        class="grow shrink p-2 h-full overflow-hidden grid grid-flow-col gap-2"
       >
-        <div>
-          <FeedbackItemComp
-            v-for="item in items"
-            :key="item._id as string"
-            :id="item._id as string"
-            :type="item.type"
-            :title="item.title"
-            :reporter="item.name"
-            :date="item.updatedAt"
-          />
-        </div>
+        <FeedbackItemComp
+          v-for="item in feedbackStore.pageItems"
+          :key="item._id as string"
+          :id="item._id as string"
+          :type="item.type"
+          :title="item.title"
+          :reporter="item.name"
+          :date="item.updatedAt"
+        />
+        <!-- <div>
+        </div> -->
       </div>
       <div class="h-16 flex flex-col justify-center items-center p-2">
-        <PaginationGenerator class="w-full" />
+        <PaginationGenerator class="w-full" 
+          :total="feedbackStore.total"
+          v-model:page="feedbackStore.pageNumber"
+          :siblingCount="1"
+          showEdges
+        />
       </div>
     </ResizablePanel>
     <ResizableHandle id="demo-handle-1" />
@@ -165,7 +108,10 @@ watchEffect(() => {
         <template v-if="Component">
           <Transition mode="out-in">
             <KeepAlive>
-              <component :is="Component" :key="$route.fullPath"></component>
+              <component
+                :is="Component"
+                :key="$route.fullPath"
+              ></component>
             </KeepAlive>
           </Transition>
         </template>

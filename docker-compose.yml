@@ -3,13 +3,23 @@ services:
     container_name: marker-mongodb
     image: mongo:latest
     volumes:
-      - ./backend/data:/data/db
+      - mongodata:/data/db
     command: mongod --noauth
     restart: always
 
+  npm_install:
+    image: node:lts-iron
+    volumes:
+      - ./:/app
+    command: npm install --no-save @rollup/rollup-linux-arm64-gnu
+    working_dir: /app
+    restart: no
+
   backend:
     container_name: marker-backend
-    build: ./backend
+    image: node:lts-iron
+    expose:
+      - 3000
     ports:
       - '3000:3000'
     depends_on:
@@ -19,16 +29,23 @@ services:
       - ./backend/.env
     volumes:
       - ./:/app
+    working_dir: /app/backend
+    command: npm run dev
 
   frontend:
     container_name: marker-frontend
-    build: ./frontend
-    ports:
-      - '5173:5173'
     depends_on:
       - backend
+    image: node:lts-iron
+    expose:
+      - 5173
+    ports:
+      - '5173:5173'
+    restart: always
     volumes:
       - ./:/app
+    working_dir: /app/frontend
+    command: npm run dev
 
 volumes:
-  mongo-data:
+  mongodata:

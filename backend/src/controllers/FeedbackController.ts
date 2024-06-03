@@ -1,6 +1,6 @@
 import type { Request, Response } from 'express'
 import { FeedbackModel } from '../models/Feedback'
-import { feedbackSchema, type FeedbackItem } from '../../../shared/src/zod'
+import { newFeedbackSchema, type FeedbackItem } from '../../../shared/src/zod'
 import { faker } from '@faker-js/faker'
 export * from './getFeedbackPage'
 import { Schema, type AnyBulkWriteOperation } from 'mongoose'
@@ -8,7 +8,7 @@ import { Schema, type AnyBulkWriteOperation } from 'mongoose'
 const ObjectId = Schema.Types.ObjectId
 
 export async function createFeedback(req: Request, res: Response) {
-  const parseResult = await feedbackSchema
+  const parseResult = await newFeedbackSchema
     .safeParseAsync(req.body)
     .catch((error: unknown) => {
       res.status(500).send({ error, message: 'Failed to parse the request payload' })
@@ -26,11 +26,13 @@ export async function createFeedback(req: Request, res: Response) {
   const feedbackData = parseResult.data
   const feedback = new FeedbackModel(feedbackData)
 
-  await feedback.save().catch((error: unknown) => {
-    return res.status(500).send({ error, message: 'Failed to save feedback' })
+  const savedFeedback = await feedback.save().catch((error: unknown) => {
+    res.status(500).send({ error, message: 'Failed to save feedback' })
   })
 
-  res.status(201).send(feedback)
+  if (!savedFeedback) return // the error was already sent
+
+  res.status(201).send(savedFeedback)
 }
 
 export function getFeedbackList(_req: Request, res: Response) {

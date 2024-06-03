@@ -14,7 +14,7 @@ export const _idStringSchema = z.string()
 export const _idSchema = _idStringSchema.or(_idObjectSchema)
 
 export const feedbackSchema = z.object({
-  _id: _idSchema,
+  _id: _idStringSchema,
   name: z.string().min(3).max(32),
   email: z.string().email(),
   type: z.enum(FeedbackType.keys()),
