@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import { mongooseSchemas, zodSchemas } from '../../../shared/src'
 import { GetModelGenerics } from '@/utils'
+import { escapeRegExp } from 'lodash'
 import type z from 'zod'
 
 const { feedbackFetchParamsSchema } = zodSchemas
@@ -28,13 +29,40 @@ export async function getFeedbackPage(req: Request, res: Response) {
     page,
     order,
     itemsPerPage,
+    search,
     // localItemCount,
     minCreatedAt,
     maxCreatedAt,
     // minUpdatedAt,
     maxUpdatedAt
   } = parseResult.data
+
   const isAsc = order === 'asc'
+
+  const totalItemsInDB = await FeedbackModel.countDocuments()
+
+  if (search) {
+    const searchQuery = escapeRegExp(search)
+
+    const searchResults = await FeedbackModel.find({
+      $or: [
+        { type: { $regex: searchQuery, $options: 'i' } },
+        { name: { $regex: searchQuery, $options: 'i' } },
+        { email: { $regex: searchQuery, $options: 'i' } },
+        { title: { $regex: searchQuery, $options: 'i' } }
+      ]
+    })
+      .sort({ updatedAt: order })
+      .skip((page - 1) * itemsPerPage)
+      .limit(itemsPerPage)
+
+    res.status(200).send({
+      newPageItems: [],
+      updatedCacheItems: [],
+      totalItemsInDB,
+      searchResults
+    })
+  }
 
   // Here I'm starting to build the query from an empty object
   // That is because if neither dates are defined, then I want
@@ -46,7 +74,6 @@ export async function getFeedbackPage(req: Request, res: Response) {
   // isAsc && maxCreatedAt && (queryForNextPage.createdAt = { $gte: maxCreatedAt })
   // !isAsc && minCreatedAt && (queryForNextPage.createdAt = { $lte: minCreatedAt })
 
-  const totalItemsInDB = await FeedbackModel.countDocuments()
   const skipItems = (page - 1) * itemsPerPage
 
   const nextFeedbacksPage = FeedbackModel.find(queryForNextPage)
@@ -77,7 +104,12 @@ export async function getFeedbackPage(req: Request, res: Response) {
         return sortDirection * (a.updatedAt.getTime() - b.updatedAt.getTime())
       })
 
-      res.status(200).send({ newPageItems, updatedCacheItems, totalItemsInDB })
+      res.status(200).send({
+        totalItemsInDB,
+        newPageItems,
+        updatedCacheItems,
+        searchResults: []
+      })
     })
     .catch((error) => {
       res.status(500).send({ error, message: 'Failed to fetch feedbacks' })

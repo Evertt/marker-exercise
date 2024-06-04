@@ -4,7 +4,7 @@ import { DependencyType } from '@/components/ui/auto-form/interface'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { feedbackSchema, newFeedbackSchema } from '$shared/zod'
-import env from "@/env"
+import env from '@/env'
 
 const router = useRouter()
 
@@ -25,7 +25,7 @@ async function onSubmit(data: any) {
 
   const json = await resp.json()
   const newModel = feedbackSchema.parse(json)
-  router.push({ name: '//[id]', params: { id: newModel._id }})
+  router.push({ name: '//[id]', params: { id: newModel._id } })
 }
 </script>
 
@@ -70,7 +70,9 @@ async function onSubmit(data: any) {
           }"
         >
           <div class="mt-4 flex justify-end gap-2 space-y-2 !max-w-none">
-            <Button type="reset" variant="secondary"> Discard </Button>
+            <Button type="reset" @click="router.push({ name: '//' })" variant="secondary">
+              Discard
+            </Button>
             <Button type="submit" class="w-max"> Send Feedback </Button>
           </div>
         </AutoForm>

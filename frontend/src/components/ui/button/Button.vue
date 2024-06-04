@@ -3,10 +3,10 @@ import type { HTMLAttributes } from 'vue'
 import { Primitive, type PrimitiveProps } from 'radix-vue'
 import { type ButtonVariants, buttonVariants } from '.'
 import { cn } from '@/lib/utils'
-import type { Merge, JsonObject } from 'type-fest'
+import type { JsonObject } from 'type-fest'
 import { computed } from 'vue'
 
-type ButtonProps = PrimitiveProps & {
+type Props = PrimitiveProps & {
   variant?: ButtonVariants['variant']
   size?: ButtonVariants['size']
   class?: HTMLAttributes['class']
@@ -14,17 +14,6 @@ type ButtonProps = PrimitiveProps & {
   method?: 'GET' | 'POST' | 'PUT' | 'DELETE'
   data?: JsonObject
 }
-
-// type FormButtonProps = Merge<
-//   ButtonProps,
-//   {
-//     method?: 'GET' | 'PoST' | 'PUT' | 'DELETE'
-//     action: string
-//     data?: JsonObject
-//   }
-// >
-
-type Props = ButtonProps // | FormButtonProps
 
 const props = withDefaults(defineProps<Props>(), {
   as: 'button',

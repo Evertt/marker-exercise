@@ -16,7 +16,8 @@ const isoStringToDateSchema = z
   })
 
 export const feedbackFetchParamsSchema = z.object({
-  page: z.coerce.number().default(1),
+  page: z.coerce.number(),
+  search: z.string().optional(),
   order: z.enum(['asc', 'desc']).default('desc'),
   itemsPerPage: z.coerce.number().default(20),
   // localItemCount: z.coerce.number().default(0),
@@ -29,6 +30,7 @@ export const feedbackFetchParamsSchema = z.object({
 export const paginatedResultsSchema = z.object({
   newPageItems: z.array(feedbackSchema),
   updatedCacheItems: z.array(feedbackSchema),
+  searchResults: z.array(feedbackSchema),
   totalItemsInDB: z.number()
 })
 

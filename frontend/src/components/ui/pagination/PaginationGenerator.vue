@@ -9,18 +9,13 @@ import {
   PaginationNext,
   PaginationPrev
 } from '.'
+import { type PaginationRootProps, type PaginationRootEmits } from 'radix-vue'
 
 import { Button } from '../button'
 
-const props = defineProps<{
-  class?: string
-  total: number
-  siblingCount?: number
-  showEdges?: boolean
-  page: number
-}>()
+const props = defineProps<PaginationRootProps & { class: string }>()
 
-const emits = defineEmits<{'update:page':[page: number]}>()
+const emits = defineEmits<PaginationRootEmits>()
 </script>
 
 <template>
@@ -28,7 +23,7 @@ const emits = defineEmits<{'update:page':[page: number]}>()
     :class="props.class"
     v-slot="{ page }"
     :total="props.total"
-    :sibling-count="0.5"
+    :sibling-count="props.siblingCount"
     :show-edges="props.showEdges"
     :page="props.page"
     @update:page="emits('update:page', $event)"
@@ -41,14 +36,14 @@ const emits = defineEmits<{'update:page':[page: number]}>()
         <PaginationListItem
           v-if="item.type === 'page'"
           :key="index"
-          :value="item.value"
+          :value="Math.ceil(item.value)"
           as-child
         >
           <Button
             class="w-10 h-10 p-0"
-            :variant="item.value === page ? 'default' : 'outline'"
+            :variant="Math.ceil(item.value) === page ? 'default' : 'outline'"
           >
-            {{ item.value }}
+            {{ Math.ceil(item.value) }}
           </Button>
         </PaginationListItem>
         <PaginationEllipsis v-else :key="item.type" :index="index" />
